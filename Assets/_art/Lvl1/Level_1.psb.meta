@@ -335,6 +335,28 @@ ScriptedImporter:
     parentGroupIndex: -1
     uvTransform: {x: 3852, y: 4}
     spritePosition: {x: 1192, y: 1408}
+  - name: Platform
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 1642
+      y: 2172
+      width: 404
+      height: 53
+    spriteID: 3d86b9f590e0f1146904733c5a42210a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 1642, y: 2172}
+    spritePosition: {x: 1370, y: 1642}
   - name: Ground
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -580,6 +602,16 @@ ScriptedImporter:
     spriteID: c9c4670708ddcdb4bb530aa7da24ad67
     layerID: 51
     mosaicPosition: {x: 3852, y: 4}
+    flatten: 0
+    isImported: 1
+    isVisible: 1
+  - name: Platform
+    spriteName: Platform
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 3d86b9f590e0f1146904733c5a42210a
+    layerID: 70
+    mosaicPosition: {x: 1642, y: 2172}
     flatten: 0
     isImported: 1
     isVisible: 1

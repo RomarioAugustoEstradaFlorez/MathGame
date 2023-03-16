@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class PlayerBehaviour : PhysicsObject
@@ -22,6 +23,8 @@ public class PlayerBehaviour : PhysicsObject
 
     [Header("Instances")]
     private GameManager gm;
+
+    public bool platformLanded;
 
     /*
     * Singleton instantiation 
@@ -66,30 +69,48 @@ public class PlayerBehaviour : PhysicsObject
     {
         if (getPLayerType() == "Square")
         {
-            ///* Attack move */
-            //if (punchMove) StartCoroutine(ActiveSquarePunch());/* Attack move */
-
-            /* To move horizontally using linear function */
-            float horizontalMove = Input.GetAxis("Horizontal");
-            targetVelocity = new Vector2(horizontalMove * movementSpeed, 0);
-
-            /* To Jump using square root function */
-            bool jumpMove = Input.GetButtonDown("Jump");
-            if (jumpMove && grounded)
-            {
-                Debug.Log("jumpForce > " + jumpForce);
-                Debug.Log("gravity > " + gravityModifier);
-
-                float jumpTime = Mathf.Sqrt(2f* jumpForce / gravityModifier);
-                Debug.Log("jumpTime > " + jumpTime);
-
-                velocity.y = jumpTime * gravityModifier;
-                Debug.Log("velocity.y > " + velocity.y);
-            }
+            movementPlayer();
 
             /* Flip horizontal when the player moves left or right */
             if (targetVelocity.x < -0.01) transform.localScale = new Vector2(-1, 1);
             if (targetVelocity.x > 0.01) transform.localScale = new Vector2(1, 1);
+   
+        }
+
+    }
+
+    public void movementPlayer()
+    {
+        Debug.Log("mover");
+        ///* Attack move */
+        //if (punchMove) StartCoroutine(ActiveSquarePunch());/* Attack move */
+        
+        /* To move horizontally using linear function */
+        float horizontalMove = Input.GetAxis("Horizontal");
+        targetVelocity = new Vector2(horizontalMove * movementSpeed, 0);
+
+        /* To Jump using square root function */
+        bool jumpMove = Input.GetButtonDown("Jump");
+        if (jumpMove && grounded)
+        {
+            //Debug.Log("jumpForce > " + jumpForce);
+            //Debug.Log("gravity > " + gravityModifier);
+
+            float jumpTime = Mathf.Sqrt(2f * jumpForce / gravityModifier);
+            //Debug.Log("jumpTime > " + jumpTime);
+
+            velocity.y = jumpTime * gravityModifier;
+            //Debug.Log("velocity.y > " + velocity.y);
+        }
+        // Remove parent-child relationship if player object is on platform but not stationary
+        if(targetVelocity.magnitude == 0) Debug.Log("targetVelocity.magnitude > " + targetVelocity.magnitude);
+        if (transform.parent == PlatformMovement.Instance.transform && targetVelocity.magnitude > 4 && platformLanded == true)
+        {
+            transform.SetParent(null);
+        }
+        if (transform.parent == null && targetVelocity.magnitude < 4 && platformLanded == false)
+        {
+            transform.SetParent(transform);
         }
     }
 
