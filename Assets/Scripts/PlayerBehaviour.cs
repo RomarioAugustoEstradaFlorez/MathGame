@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using TMPro;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerBehaviour : PhysicsObject
 {
@@ -81,10 +83,6 @@ public class PlayerBehaviour : PhysicsObject
 
     public void movementPlayer()
     {
-        Debug.Log("mover");
-        ///* Attack move */
-        //if (punchMove) StartCoroutine(ActiveSquarePunch());/* Attack move */
-        
         /* To move horizontally using linear function */
         float horizontalMove = Input.GetAxis("Horizontal");
         targetVelocity = new Vector2(horizontalMove * movementSpeed, 0);
@@ -93,25 +91,22 @@ public class PlayerBehaviour : PhysicsObject
         bool jumpMove = Input.GetButtonDown("Jump");
         if (jumpMove && grounded)
         {
-            //Debug.Log("jumpForce > " + jumpForce);
-            //Debug.Log("gravity > " + gravityModifier);
-
             float jumpTime = Mathf.Sqrt(2f * jumpForce / gravityModifier);
-            //Debug.Log("jumpTime > " + jumpTime);
-
             velocity.y = jumpTime * gravityModifier;
-            //Debug.Log("velocity.y > " + velocity.y);
         }
+
         // Remove parent-child relationship if player object is on platform but not stationary
-        if(targetVelocity.magnitude == 0) Debug.Log("targetVelocity.magnitude > " + targetVelocity.magnitude);
-        if (transform.parent == PlatformMovement.Instance.transform && targetVelocity.magnitude > 4 && platformLanded == true)
-        {
+        if (targetVelocity.magnitude > 4 && platformLanded == true) {
             transform.SetParent(null);
         }
-        if (transform.parent == null && targetVelocity.magnitude < 4 && platformLanded == false)
-        {
+        if (targetVelocity.magnitude < 4 && platformLanded == false) {
             transform.SetParent(transform);
         }
+    }
+
+    public void Die()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     /*

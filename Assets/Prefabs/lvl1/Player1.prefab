@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 69982564354082002}
   - component: {fileID: 69982564354082007}
   - component: {fileID: 69982564354082003}
+  - component: {fileID: 6966692680702730457}
   m_Layer: 3
   m_Name: Player1
   m_TagString: Untagged
@@ -101,11 +102,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minGroundNormalY: 0.65
-  gravityModifier: 3
+  gravityModifier: 10
   movementSpeed: 10
-  jumpForce: 100
+  jumpForce: 70
   playerType: 0
   VelocityX: 0
+  platformLanded: 0
 --- !u!50 &69982564354082002
 Rigidbody2D:
   serializedVersion: 4
@@ -163,3 +165,14 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!210 &6966692680702730457
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69982564354081993}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
