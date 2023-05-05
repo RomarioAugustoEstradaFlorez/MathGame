@@ -26,6 +26,12 @@ public class PlayerBehaviour : PhysicsObject
     [Header("Instances")]
     private GameManager gm;
 
+    [Header("Limits")]
+    //public Vector2 limitInit;
+    //public Vector2 limitEnd;
+    public Transform limitInit;
+    public Transform limitEnd;
+
     public bool platformLanded;
 
     /*
@@ -64,6 +70,9 @@ public class PlayerBehaviour : PhysicsObject
         //gm.healthBarOriginalSize = gm.healthBar.rectTransform.sizeDelta;
 
         SetSpawnPosition();
+
+        // sound ambient
+        SoundManager.instance.PlayAmbientSoundLoop();
     }
 
     // Update is called once per frame
@@ -76,7 +85,6 @@ public class PlayerBehaviour : PhysicsObject
             /* Flip horizontal when the player moves left or right */
             if (targetVelocity.x < -0.01) transform.localScale = new Vector2(-1, 1);
             if (targetVelocity.x > 0.01) transform.localScale = new Vector2(1, 1);
-   
         }
 
     }
@@ -91,6 +99,7 @@ public class PlayerBehaviour : PhysicsObject
         bool jumpMove = Input.GetButtonDown("Jump");
         if (jumpMove && grounded)
         {
+            SoundManager.instance.PlayJumpSound();
             float jumpTime = Mathf.Sqrt(2f * jumpForce / gravityModifier);
             velocity.y = jumpTime * gravityModifier;
         }
@@ -102,11 +111,8 @@ public class PlayerBehaviour : PhysicsObject
         if (targetVelocity.magnitude < 4 && platformLanded == false) {
             transform.SetParent(transform);
         }
-    }
 
-    public void Die()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        transform.position = LimitToRect(transform.position, limitInit.position, limitEnd.position);
     }
 
     /*
@@ -120,6 +126,33 @@ public class PlayerBehaviour : PhysicsObject
             GameObject.Find("SpawnPosition").SetActive(false);
         }
     }
+
+    /*
+     * This is the g(x) function
+     */
+    public float Limit(float a, float min, float max)
+    {
+        return Mathf.Min(Mathf.Max(a, min), max);
+    }
+
+    /*
+     * This is the f(x) function
+     */
+    public Vector3 LimitToRect(Vector3 position, Vector2 p1, Vector2 p2)
+    {
+        float minX = Mathf.Min(p1.x, p2.x);
+        float maxX = Mathf.Max(p1.x, p2.x);
+
+        float x = Limit(position.x, minX, maxX);
+
+        return new Vector3(x, position.y, position.z);
+    }
+
+    public void Die()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
 
     /*
     * getPLayerType - This gets the player evolution

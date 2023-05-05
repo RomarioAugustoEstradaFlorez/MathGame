@@ -20,6 +20,7 @@ public class DieZone : MonoBehaviour
     {
         if (collision.gameObject == PlayerBehaviour.Instance.gameObject)
         {
+            SoundManager.instance.PlayDeadSound();
             PlayerBehaviour.Instance.Die();
         }
     }
