@@ -26,11 +26,28 @@ public class EnemyBehaviour : PhysicsObject
     [SerializeField] private float rayCastVerticalLength = 2;
     [SerializeField] private float rayCastHorizontalLength = 2;
     [SerializeField] private LayerMask rayCastLayerMask;
-    private int direction = 1; // it couldn't be 0
+    
+    public int direction = 1; // it couldn't be 0
 
     float speed = 2f;
     float exponent = 2f;
 
+
+    /*
+    * Singleton instantiation 
+    * enemyInstance - Will save the information of this component
+    * and if it does not appear, the Instance method get the information by itself.
+    * The it save the return value into Instance, so this could be call from everywhere
+    */
+    private static EnemyBehaviour enemyInstance;
+    public static EnemyBehaviour Instance
+    {
+        get
+        {
+            if (enemyInstance == null) enemyInstance = GameObject.FindObjectOfType<EnemyBehaviour>();
+            return enemyInstance;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +58,7 @@ public class EnemyBehaviour : PhysicsObject
     // Update is called once per frame
     void Update()
     {
-        enemyMovement();
+        enemyJumpingMovement();
         //rayCastMovement();
 
         /*
@@ -49,6 +66,7 @@ public class EnemyBehaviour : PhysicsObject
         */
         if (health <= 0) Destroy(gameObject);
     }
+
 
     public void rayCastMovement()
     {
@@ -103,27 +121,12 @@ public class EnemyBehaviour : PhysicsObject
         if (leftEnemyRc.collider != null && leftEnemyRc.collider.CompareTag("EnemyTag")) direction = 1;
     }
 
-    public void enemyMovement()
+    public void enemyJumpingMovement()
     {
-        //float time = Time.time;
-        //float newPositionX = Mathf.Pow(time, exponent) * speed;
-        //transform.position = new Vector3(newPositionX, transform.position.y, transform.position.z);
+        float newPositionX = 3f * Time.deltaTime; // Calculate the first movement component in x
+        float newPositionY = 4f * Time.deltaTime; // Calculate the second movement component in y
 
-        float newPositionX = 1f * Time.deltaTime; // Calculate the first movement component
-        float newPositionY = 4f * Time.deltaTime; // Calculate the second movement component
-
-        transform.position += new Vector3(newPositionX, newPositionY, 0f);
-    }
-
-    float powerRule(float speed, float exponent)
-    {
-        float time = Time.time;
-        Debug.Log(time);
-        float positionX = Mathf.Pow(time * speed, exponent);
-        return positionX;
-        //float a = 3f; // constant coefficient
-        //float n = 2f; // exponent
-        //return a * Mathf.Pow(x, n); // power rule: d/dx(x^n) = n * x^(n-1)
+        transform.position += new Vector3(newPositionX * direction, newPositionY, 0f);
     }
 
     private void OnCollisionEnter2D(Collision2D colEnemy) {

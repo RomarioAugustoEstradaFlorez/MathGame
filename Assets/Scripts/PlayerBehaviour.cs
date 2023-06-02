@@ -115,7 +115,7 @@ public class PlayerBehaviour : PhysicsObject
             transform.SetParent(transform);
         }
 
-
+        // Limits
         float minX = Mathf.Min(limitInit.position.x, limitEnd.position.x);
         float maxX = Mathf.Max(limitInit.position.x, limitEnd.position.x);
 
